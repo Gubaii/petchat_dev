@@ -1,0 +1,21 @@
+{
+  "name": "petchat",
+  "version": "1.0.0",
+  "description": "一款连接主人与宠物的移动应用",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "alpinejs": "^3.13.0",
+    "dayjs": "^1.11.10",
+    "echarts": "^5.6.0",
+    "howler": "^2.2.4",
+    "mockjs": "^1.1.0",
+    "tailwindcss": "^3.3.3",
+    "video.js": "^8.5.2",
+    "vite": "^4.4.9"
+  }
+}
