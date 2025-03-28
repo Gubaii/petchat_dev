@@ -4,13 +4,16 @@ import * as echarts from 'echarts';
 import dayjs from 'dayjs';
 
 // 导入虚拟数据
-import { petData, messageData, reportData, getEnvironmentData, allPetsData, catMessages, dogMessages, guineaPigMessages, groupMessages, systemMessagesV2 } from './mock/data.js';
+import { petData, messageData, reportData, getEnvironmentData, allPetsData, catMessages, dogMessages, guineaPigMessages, groupMessages, systemMessagesV2, groupData } from './mock/data.js';
 
 // 用户头像 - 更新为更好看的图像
 const userAvatar = 'https://ui-avatars.com/api/?name=Me&background=3B82F6&color=fff&bold=true&font-size=0.6&rounded=true';
 
 // 管家头像 - 更新为更专业的管家图标
 const butlerAvatar = 'https://cdn-icons-png.flaticon.com/512/2271/2271092.png';
+
+// 在文件顶部导入
+import { initAudioPlayer } from './utils/audioPlayer.js';
 
 // 等待 DOM 加载完成后初始化应用
 document.addEventListener('DOMContentLoaded', () => {
@@ -26,11 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
     pet: petData,
     allPetsData: allPetsData, // 所有宠物数据
     currentPetId: null, // 当前选中的宠物ID
+    newTrait: '', // 用于添加性格特点的临时变量
     messages: [],  // 当前显示的消息
     allMessages: messageData, // 所有消息
     systemMessages: systemMessagesV2, // 使用新的系统消息
     petMessages: [], // 宠物和用户的对话
     groupMessages: groupMessages, // 群组消息
+    groupData: groupData, // 群组数据
     // 为每个宠物创建单独的消息数组
     petSpecificMessages: {
       'pet-001': messageData, // 仓鼠消息
@@ -171,6 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
       this.allPetsData = allPetsData;
       this.environmentData = getEnvironmentData();
       
+      // 初始化宠物特定属性
+      this.initializePetSpecificTraits();
+      
       // 初始化消息数据
       this.initializeMessages();
       
@@ -203,6 +211,50 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         this.reorderChatList();
       }, 100);
+    },
+    
+    // 初始化宠物特定属性
+    initializePetSpecificTraits(petsArray) {
+      // 如果没有提供参数，则使用所有宠物数据
+      const pets = petsArray || this.allPetsData;
+      
+      pets.forEach(pet => {
+        if (!pet.specificTraits) {
+          // 为不同类型的宠物初始化特定特性
+          switch(pet.type) {
+            case '仓鼠':
+              pet.specificTraits = {
+                habitat: '笼子',
+                favoriteActivity: '跑轮',
+                bedding: '木屑'
+              };
+              break;
+            case '猫':
+              pet.specificTraits = {
+                litterType: '膨润土',
+                indoorOutdoor: '室内',
+                scratchingPreference: '猫抓板'
+              };
+              break;
+            case '狗':
+              pet.specificTraits = {
+                walkFrequency: '每天两次',
+                trainingLevel: '基础',
+                foodPreference: '干粮'
+              };
+              break;
+            case '荷兰猪':
+              pet.specificTraits = {
+                cageSize: '中型',
+                hayConsumption: '高',
+                companionship: '需要伴侣'
+              };
+              break;
+            default:
+              pet.specificTraits = {};
+          }
+        }
+      });
     },
     
     // 重新排序聊天列表，将群聊移到最后
@@ -287,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
           id: 'system-msg-2',
           type: 'system',
           contentType: 'text',
-          content: '根据最新监测数据，您的所有宠物今天状态良好：豆豆活动量增加20%，咪咪的睡眠质量优，旺财进食正常，球球的体重略有增加但在健康范围内。',
+          content: '根据最新监测数据，您的所有宠物今天状态良好：豆豆活动量增加20%，阿努比斯的睡眠质量优，咪咕进食正常，刘看山的体重略有增加但在健康范围内。',
           timestamp: Date.now() - 86400000 * 4 + 1000 * 60 * 12, // 4天前+12分钟
           read: true,
           category: 'chat',
@@ -297,7 +349,7 @@ document.addEventListener('DOMContentLoaded', () => {
           id: 'user-msg-2',
           type: 'user',
           contentType: 'text',
-          content: '球球最近吃什么食物好？',
+          content: '刘看山最近吃什么食物好？',
           timestamp: Date.now() - 86400000 * 3, // 3天前
           read: true,
           category: 'chat',
@@ -307,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
           id: 'system-msg-3',
           type: 'system',
           contentType: 'text',
-          content: '根据球球的健康数据和饮食习惯，建议提供高纤维蔬菜（如胡萝卜、黄瓜）和适量的荷兰猪专用主粮。最近一周的健康监测显示，球球对甜椒反应良好，可以作为零食适量添加。同时，请确保提供充足的新鲜牧草。',
+          content: '根据刘看山的健康数据和饮食习惯，建议提供高纤维蔬菜（如胡萝卜、黄瓜）和适量的荷兰猪专用主粮。最近一周的健康监测显示，刘看山对甜椒反应良好，可以作为零食适量添加。同时，请确保提供充足的新鲜牧草。',
           timestamp: Date.now() - 86400000 * 3 + 1000 * 60 * 2, // 3天前+2分钟
           read: true,
           category: 'chat',
@@ -318,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
           id: 'system-msg-4',
           type: 'system',
           contentType: 'text',
-          content: '【10月宠物健康月报】所有宠物本月健康评分均在85分以上，球球体重有轻微增加。详细数据请查看月报卡片。',
+          content: '【10月宠物健康月报】所有宠物本月健康评分均在85分以上，刘看山体重有轻微增加。详细数据请查看月报卡片。',
           timestamp: Date.now() - 86400000 * 2, // 2天前
           read: true,
           category: 'chat',
@@ -339,7 +391,7 @@ document.addEventListener('DOMContentLoaded', () => {
           id: 'user-msg-3',
           type: 'user',
           contentType: 'text',
-          content: '咪咪最近有什么异常表现吗？',
+          content: '阿努比斯最近有什么异常表现吗？',
           timestamp: Date.now() - 1000 * 60 * 60 * 3, // 3小时前
           read: true,
           category: 'chat',
@@ -349,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
           id: 'system-msg-6',
           type: 'system',
           contentType: 'text',
-          content: '咪咪最近总体状态良好，没有明显异常。监测到的小变化有：昨晚睡眠时间比平均水平少约30分钟；饮水量比平时略少10%，但仍在正常范围内。建议在白天增加一些互动玩耍时间，并确保水盆始终有清水。',
+          content: '阿努比斯最近总体状态良好，没有明显异常。监测到的小变化有：昨晚睡眠时间比平均水平少约30分钟；饮水量比平时略少10%，但仍在正常范围内。建议在白天增加一些互动玩耍时间，并确保水盆始终有清水。',
           timestamp: Date.now() - 1000 * 60 * 60 * 3 + 1000 * 60 * 2, // 3小时前+2分钟
           read: true,
           category: 'chat',
@@ -577,9 +629,9 @@ document.addEventListener('DOMContentLoaded', () => {
                   msg.contentType === 'voice' ?
                   `<div class="bg-pet rounded-2xl rounded-bl-none p-3 chat-bubble-in">
                      <div class="flex flex-col">
-                       <audio src="${msg.mediaUrl}" id="audio-${msg.id}"></audio>
+                       <audio src="${msg.mediaUrl}" id="audio-${msg.id}" crossorigin="anonymous"></audio>
                        <div class="flex items-center mb-2">
-                         <button onclick="document.getElementById('audio-${msg.id}').play()" class="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2 focus:outline-none">
+                         <button onclick="window.appData.playVoiceMessage('${msg.id}', '${msg.content.replace(/'/g, "\\'")}', '${msg.type}', '${this.pet.type}')" class="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2 focus:outline-none">
                            <span class="material-icons text-primary text-base">play_arrow</span>
                          </button>
                          <div class="flex items-center">
@@ -635,9 +687,9 @@ document.addEventListener('DOMContentLoaded', () => {
                   <div class="flex-1 flex justify-end">
                     <div class="bg-blue-500 rounded-2xl rounded-br-none p-3 text-white chat-bubble-out max-w-[70%]">
                       <div class="flex flex-col">
-                        <audio src="${msg.mediaUrl}" id="audio-${msg.id}"></audio>
+                        <audio src="${msg.mediaUrl}" id="audio-${msg.id}" crossorigin="anonymous"></audio>
                         <div class="flex items-center mb-2">
-                          <button onclick="document.getElementById('audio-${msg.id}').play()" class="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2 focus:outline-none">
+                          <button onclick="window.appData.playVoiceMessage('${msg.id}', '${msg.content.replace(/'/g, "\\'")}', '${msg.type}', 'owner')" class="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2 focus:outline-none">
                             <span class="material-icons text-blue-500 text-base">play_arrow</span>
                           </button>
                           <div class="flex items-center">
@@ -652,6 +704,34 @@ document.addEventListener('DOMContentLoaded', () => {
                           <span class="ml-2 text-xs text-blue-100">${msg.duration}"</span>
                         </div>
                         ${msg.content ? `<div class="text-sm text-blue-100">${msg.content}</div>` : ''}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-10 h-10 rounded-full overflow-hidden ml-2 flex-shrink-0">
+                    <img src="${userAvatar}" alt="用户头像" class="w-full h-full object-cover">
+                  </div>
+                `;
+              } else if (msg.contentType === 'audio') {
+                messageElement.innerHTML = `
+                  <div class="flex-1 flex justify-end">
+                    <div class="bg-blue-500 rounded-2xl rounded-br-none p-3 text-white chat-bubble-out max-w-[70%]">
+                      <div class="flex flex-col">
+                        <audio src="${msg.mediaUrl}" id="audio-${msg.id}" crossorigin="anonymous"></audio>
+                        <div class="flex items-center">
+                          <button onclick="window.appData.playVoiceMessage('${msg.id}', '', '${msg.type}', 'owner')" class="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2 focus:outline-none voice-message-play" data-message-id="${msg.id}">
+                            <span class="material-icons text-blue-500 text-base">play_arrow</span>
+                          </button>
+                          <div class="flex items-center">
+                            <div class="voice-wave flex items-end h-4 space-x-0.5">
+                              <span class="inline-block w-0.5 h-1 bg-white"></span>
+                              <span class="inline-block w-0.5 h-2 bg-white"></span>
+                              <span class="inline-block w-0.5 h-3 bg-white"></span>
+                              <span class="inline-block w-0.5 h-2 bg-white"></span>
+                              <span class="inline-block w-0.5 h-1 bg-white"></span>
+                            </div>
+                          </div>
+                          <span class="ml-2 text-xs text-blue-100">${msg.duration}"</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -707,10 +787,10 @@ document.addEventListener('DOMContentLoaded', () => {
                   <div class="flex flex-col max-w-[70%]">
                     <div class="bg-pet rounded-2xl rounded-bl-none p-3 chat-bubble-in">
                       <div class="flex flex-col">
-                        <audio src="${msg.mediaUrl}" id="audio-${msg.id}"></audio>
+                        <audio src="${msg.mediaUrl}" id="audio-${msg.id}" crossorigin="anonymous"></audio>
                         <div class="flex items-center mb-2">
-                          <button onclick="document.getElementById('audio-${msg.id}').play()" class="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2 focus:outline-none">
-                            <span class="material-icons text-primary text-base">play_arrow</span>
+                          <button onclick="window.appData.playVoiceMessage('${msg.id}', '${msg.content.replace(/'/g, "\\'")}', '${msg.type}', '${this.pet.type}')" class="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2 focus:outline-none voice-message-play" data-message-id="${msg.id}">
+                            <span class="material-icons text-blue-500 text-base">play_arrow</span>
                           </button>
                           <div class="flex items-center">
                             <div class="voice-wave flex items-end h-4 space-x-0.5">
@@ -724,6 +804,35 @@ document.addEventListener('DOMContentLoaded', () => {
                           <span class="ml-2 text-xs text-text-secondary">${msg.duration}"</span>
                         </div>
                         ${msg.content ? `<div class="text-sm text-gray-600">${msg.content}</div>` : ''}
+                      </div>
+                    </div>
+                  </div>
+                `;
+              } else if (msg.contentType === 'audio') {
+                messageElement.innerHTML = `
+                  <div class="w-10 h-10 rounded-full overflow-hidden mr-2 flex-shrink-0" 
+                      onclick="window.appData.openPetSettings(${JSON.stringify(this.currentPetId)})">
+                    <img src="${this.pet.avatar}" alt="宠物头像" class="w-full h-full object-cover">
+                  </div>
+                  <div class="flex flex-col max-w-[70%]">
+                    <div class="bg-pet rounded-2xl rounded-bl-none p-3 chat-bubble-in">
+                      <div class="flex flex-col">
+                        <audio src="${msg.mediaUrl}" id="audio-${msg.id}" crossorigin="anonymous"></audio>
+                        <div class="flex items-center">
+                          <button onclick="window.appData.playVoiceMessage('${msg.id}', '', '${msg.type}', '${this.pet.type}')" class="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2 focus:outline-none voice-message-play" data-message-id="${msg.id}">
+                            <span class="material-icons text-blue-500 text-base">play_arrow</span>
+                          </button>
+                          <div class="flex items-center">
+                            <div class="voice-wave flex items-end h-4 space-x-0.5">
+                              <span class="inline-block w-0.5 h-1 bg-black"></span>
+                              <span class="inline-block w-0.5 h-2 bg-black"></span>
+                              <span class="inline-block w-0.5 h-3 bg-black"></span>
+                              <span class="inline-block w-0.5 h-2 bg-black"></span>
+                              <span class="inline-block w-0.5 h-1 bg-black"></span>
+                            </div>
+                          </div>
+                          <span class="ml-2 text-xs text-text-secondary">${msg.duration}"</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1168,7 +1277,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const catReplies = [
           '以月亮的名义，我要惩罚你的迟到喵！我的晚饭呢？',
           '哼～作为一只月亮战士，我有责任守护这个家的和平喵！',
-          '邪恶势力休想得逞！我咪咪，代表爱与正义，消灭你喵！',
+          '邪恶势力休想得逞！我阿努比斯，代表爱与正义，消灭你喵！',
           '主人，我今天守护了窗台，保护花盆不被邪恶势力入侵喵～',
           '看招！猫猫拳！喵喵喵～',
           '爱就是力量的源泉喵～主人，你就是我的月亮呢！',
@@ -1193,12 +1302,12 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (this.currentPetId === 'pet-003') {
         // 狗狗回复 - 郭德纲相声风格
         const dogReplies = [
-          '各位观众，各位听众！今儿个又是崭新的一天！您瞧瞧我这生活，旺财在此有礼了！',
+          '各位观众，各位听众！今儿个又是崭新的一天！您瞧瞧我这生活，咪咕在此有礼了！',
           '哎呦喂，这日子没法过了！主人一天天的，狗粮也不给我加量，这叫什么事儿啊！',
           '我这辈子就干仨事儿：吃饭，睡觉，看家！那都是敬业！专业！不含糊！',
           '您瞧我这狗生，起早贪黑，风里来，雨里去，就为了这一口狗粮！',
           '隔壁二狗子，那叫一个得意啊，天天吃肉！我呢？就啃个骨头，还是昨天剩的！',
-          '主人，您可是我的衣食父母啊！没有您，我旺财今天还不知道在哪个犄角旮旯混饭吃呢！',
+          '主人，您可是我的衣食父母啊！没有您，我咪咕今天还不知道在哪个犄角旮旯混饭吃呢！',
           '这年头，做狗不容易啊！看门还得卖萌，多才多艺的！',
           '我说您听着，这人啊，养狗就跟攒钱一样，得每天都稀罕才行！'
         ];
@@ -1206,7 +1315,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (userMessage.includes('吃') || userMessage.includes('饭') || userMessage.includes('食物')) {
           reply = '哎呦我的老天爷！终于想起我肚子饿了？我这都快饿出肋骨了！您瞧瞧，这骨头渣子有啥营养啊！您再不来，我就该唱"小白菜"了！';
         } else if (userMessage.includes('玩') || userMessage.includes('无聊')) {
-          reply = '乐意奉陪！这遛弯儿的事儿，我旺财最在行！走街串巷，那是我的强项！不过您可得跟上，我这腿脚利索着呢！';
+          reply = '乐意奉陪！这遛弯儿的事儿，我咪咕最在行！走街串巷，那是我的强项！不过您可得跟上，我这腿脚利索着呢！';
         } else if (userMessage.includes('想你') || userMessage.includes('回来')) {
           reply = '哎呦我的亲主人！您可回来了！我这一天眼巴巴地望着门口，生怕您把我忘了！这没您的日子，跟个寡妇守灶似的！';
         } else if (userMessage.includes('睡') || userMessage.includes('累')) {
@@ -1271,30 +1380,31 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // 模拟宠物语音回复
     simulatePetVoiceReply() {
-      // 模拟宠物的语音回复
-      const voiceReplies = [
-        'https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3',
-        'https://assets.mixkit.co/active_storage/sfx/209/209-preview.mp3',
-        'https://assets.mixkit.co/active_storage/sfx/1018/1018-preview.mp3'
-      ];
+      // 随机决定是发送语音消息还是纯音频消息
+      const isAudioOnly = Math.random() < 0.3; // 30%概率发送纯音频消息
       
-      const randomVoice = voiceReplies[Math.floor(Math.random() * voiceReplies.length)];
-      const randomDuration = Math.floor(2 + Math.random() * 3);
+      if (isAudioOnly) {
+        this.simulatePureAudioReply();
+        return;
+      }
       
-      // 根据宠物类型选择不同风格的语音回复文本
+      // 选择一条随机回复文本
       let voiceTranslations = [];
+      let petType = '';
       
       if (this.currentPetId === 'pet-001') {
         // 仓鼠语音回复
+        petType = '仓鼠';
         voiceTranslations = [
-          '吱吱~ 我听到你了！主人你什么时候回来陪我玩呀？(^_^) 想你啦～',
-          '吱吱吱！我刚刚在小窝里藏了好多好吃的！(^o^) 是秘密宝藏哦～',
-          '主人主人，我好想你啊！(>_<) 什么时候回来看我？抱抱我吧～',
-          '吱吱~ 跑轮好好玩！我今天跑了好多圈！(^v^) 小短腿都酸啦～',
-          '嘎吱嘎吱~ 我的小牙牙有点痒，需要啃点东西！(^_-) 有木质玩具吗？'
+          '吱吱~ 我听到你了！主人你什么时候回来陪我玩呀？想你啦～',
+          '吱吱吱！我刚刚在小窝里藏了好多好吃的！是秘密宝藏哦～',
+          '主人主人，我好想你啊！什么时候回来看我？抱抱我吧～',
+          '吱吱~ 跑轮好好玩！我今天跑了好多圈！小短腿都酸啦～',
+          '嘎吱嘎吱~ 我的小牙牙有点痒，需要啃点东西！有木质玩具吗？'
         ];
       } else if (this.currentPetId === 'pet-002') {
         // 猫咪语音回复 - 美少女战士风格
+        petType = '猫';
         voiceTranslations = [
           '以月亮的名义！我要惩罚迟到的坏人喵！主人你去哪了？',
           '邪恶势力休想得逞！我已经守护家园一整天了喵！',
@@ -1304,6 +1414,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
       } else if (this.currentPetId === 'pet-003') {
         // 狗狗语音回复 - 郭德纲相声风格
+        petType = '狗';
         voiceTranslations = [
           '哎呦我的天！您听我说，今儿个门外来了仨推销的，都被我吓跑了！这看家功夫，没谁了！',
           '主人哎，您这一天天的，狗粮也不增量，骨头也不加餐，我这苦日子什么时候到头啊？',
@@ -1313,19 +1424,24 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
       } else if (this.currentPetId === 'pet-004') {
         // 荷兰猪语音回复 - 蠢萌风格
+        petType = '荷兰猪';
         voiceTranslations = [
           '咕噜咕噜...主人...我又把自己卡在角落里了...救命...我不知道怎么后退...',
           '我刚才看到一个胡萝卜！好大好大的胡萝卜！然后我发现...那是个橙色的球...咕噜...',
           '主人主人！我学会了一个新技能！就是...呃...我忘记是什么了...咕噜咕噜...',
-          '今天我梦见自己会飞！然后我从窝里滚了出来...原来我在睡觉时翻身了...咕噜...',
           '咕噜！主人！我找不到我的小毯子了！其实...我正坐在上面...不小心...咕噜咕噜...'
         ];
       }
       
       const randomText = voiceTranslations[Math.floor(Math.random() * voiceTranslations.length)];
+      const msgId = `msg-${Date.now()}`;
+      
+      // 将默认音频URL修改为空字符串
+      const defaultVoice = '';
+      const initialDuration = 3; // 初始预估时长
       
       const newMsg = {
-        id: `msg-${Date.now()}`,
+        id: msgId,
         type: 'pet',
         contentType: 'voice',
         content: randomText,
@@ -1333,8 +1449,9 @@ document.addEventListener('DOMContentLoaded', () => {
         read: false,
         category: 'chat',
         urgent: 0,
-        mediaUrl: randomVoice,
-        duration: randomDuration
+        mediaUrl: defaultVoice,
+        duration: initialDuration,
+        petType: petType
       };
       
       // 添加消息到当前聊天
@@ -1342,6 +1459,83 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // 添加到对应宠物的消息列表
       if (this.currentPetId) {
+        if (!this.petSpecificMessages[this.currentPetId]) {
+          this.petSpecificMessages[this.currentPetId] = [];
+        }
+        this.petSpecificMessages[this.currentPetId].push(newMsg);
+      }
+      
+      // 重新渲染消息以确保显示
+      this.renderMessages();
+      
+      // 尝试从缓存中获取语音
+      const cachedTTS = JSON.parse(localStorage.getItem('cachedTTS') || '{}');
+      if (cachedTTS[randomText]) {
+        const { audioUrl, duration } = cachedTTS[randomText];
+        if (audioUrl) {
+          // 更新音频URL和时长
+          const msgIndex = this.messages.findIndex(m => m.id === msgId);
+          if (msgIndex !== -1) {
+            this.messages[msgIndex].mediaUrl = audioUrl;
+            this.messages[msgIndex].duration = duration;
+          }
+          
+          // 重新渲染消息以更新UI
+          this.renderMessages();
+        }
+      }
+    },
+    
+    // 模拟纯音频回复（没有文本内容）
+    simulatePureAudioReply() {
+      let petType = '';
+      let duration = 0;
+      
+      if (this.currentPetId === 'pet-001') {
+        // 仓鼠
+        petType = '仓鼠';
+        duration = Math.floor(Math.random() * 3) + 1; // 1-3秒
+      } else if (this.currentPetId === 'pet-002') {
+        // 猫咪
+        petType = '猫';
+        duration = Math.floor(Math.random() * 2) + 1; // 1-2秒
+      } else if (this.currentPetId === 'pet-003') {
+        // 狗狗
+        petType = '狗';
+        duration = Math.floor(Math.random() * 3) + 2; // 2-4秒
+      } else if (this.currentPetId === 'pet-004') {
+        // 荷兰猪
+        petType = '荷兰猪';
+        duration = Math.floor(Math.random() * 2) + 1; // 1-2秒
+      }
+      
+      const msgId = `msg-${Date.now()}`;
+      
+      // 将默认音频URL修改为空字符串
+      const defaultVoice = '';
+      
+      const newMsg = {
+        id: msgId,
+        type: 'pet',
+        contentType: 'audio', // 纯音频类型
+        content: '', // 没有文本内容
+        timestamp: Date.now(),
+        read: false,
+        category: 'chat',
+        urgent: 0,
+        mediaUrl: defaultVoice,
+        duration: duration,
+        petType: petType
+      };
+      
+      // 添加消息到当前聊天
+      this.messages.push(newMsg);
+      
+      // 添加到对应宠物的消息列表
+      if (this.currentPetId) {
+        if (!this.petSpecificMessages[this.currentPetId]) {
+          this.petSpecificMessages[this.currentPetId] = [];
+        }
         this.petSpecificMessages[this.currentPetId].push(newMsg);
       }
       
@@ -1377,18 +1571,51 @@ document.addEventListener('DOMContentLoaded', () => {
       this.currentPage = 'profile';
     },
     
-    // 打开宠物设置面板
+    // 打开宠物设置页面
     openPetSettings(petId) {
-      console.log('打开宠物设置页面:', petId);
-      this.currentPetId = petId || 'pet-001';
-      
-      // 更新当前宠物信息
-      const currentPet = this.allPetsData.find(pet => pet.id === this.currentPetId);
-      if (currentPet) {
-        this.pet = currentPet;
-      }
-      
+      this.currentPetId = petId;
+      this.pet = this.allPetsData.find(p => p.id === petId) || this.pet;
       this.currentPage = 'petSettings';
+    },
+    
+    // 显示宠物详情弹窗
+    showPetDetails(petId) {
+      this.currentPetId = petId;
+      this.pet = JSON.parse(JSON.stringify(this.allPetsData.find(p => p.id === petId))) || this.pet;
+      
+      // 确保specificTraits已初始化（可能在深拷贝过程中丢失）
+      this.initializePetSpecificTraits([this.pet]);
+      
+      this.newTrait = '';
+      this.showModal = true;
+    },
+    
+    // 添加性格特点
+    addTrait() {
+      if (this.newTrait && this.newTrait.trim()) {
+        if (!this.pet.personality) {
+          this.pet.personality = [];
+        }
+        this.pet.personality.push(this.newTrait.trim());
+        this.newTrait = '';
+      }
+    },
+    
+    // 移除性格特点
+    removeTrait(index) {
+      if (this.pet.personality && this.pet.personality.length > index) {
+        this.pet.personality.splice(index, 1);
+      }
+    },
+    
+    // 保存宠物详情
+    savePetDetails() {
+      // 保存编辑后的宠物数据
+      const index = this.allPetsData.findIndex(p => p.id === this.currentPetId);
+      if (index !== -1) {
+        this.allPetsData[index] = JSON.parse(JSON.stringify(this.pet));
+      }
+      this.showModal = false;
     },
     
     // 切换性格特点
@@ -1428,13 +1655,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (userMessage.includes('报告') || userMessage.includes('数据')) {
         reply = '您可以在聊天记录中点击带有"日报"、"周报"或"月报"标签的消息查看详细报告，这些报告已整合了所有宠物的健康数据。';
       } else if (userMessage.includes('状态') || userMessage.includes('怎么样')) {
-        reply = `根据最新监测数据，您的所有宠物今天状态良好：豆豆活动量增加20%，咪咪的睡眠质量优，旺财进食正常，球球的体重略有增加但在健康范围内。`;
+        reply = `根据最新监测数据，您的所有宠物今天状态良好：豆豆活动量增加20%，阿努比斯的睡眠质量优，咪咕进食正常，刘看山的体重略有增加但在健康范围内。`;
       } else if (userMessage.includes('预警') || userMessage.includes('异常')) {
-        reply = '最近24小时内，检测到豆豆有轻微的啃咬笼子行为，建议提供木质玩具；咪咪的饮水量略低于平均水平，请确保提供新鲜水源。其他宠物未发现异常。';
+        reply = '最近24小时内，检测到豆豆有轻微的啃咬笼子行为，建议提供木质玩具；阿努比斯的饮水量略低于平均水平，请确保提供新鲜水源。其他宠物未发现异常。';
       } else if (userMessage.includes('环境') || userMessage.includes('温度')) {
-        reply = `当前环境数据：温度${this.environmentData.temperature}°C，湿度${this.environmentData.humidity}%，光照${this.environmentData.light}lux，噪音${this.environmentData.noise}dB。环境适宜所有宠物活动，特别适合旺财的户外训练。`;
+        reply = `当前环境数据：温度${this.environmentData.temperature}°C，湿度${this.environmentData.humidity}%，光照${this.environmentData.light}lux，噪音${this.environmentData.noise}dB。环境适宜所有宠物活动，特别适合咪咕的户外训练。`;
       } else {
-        reply = `您好，我是智能管家。我会为您提供所有宠物的健康报告、实时状态和环境数据。目前豆豆、咪咪、旺财和球球的健康状况总体良好，有任何需要了解的特定信息，请随时告诉我。`;
+        reply = `您好，我是智能管家。我会为您提供所有宠物的健康报告、实时状态和环境数据。目前豆豆、阿努比斯、咪咕和刘看山的健康状况总体良好，有任何需要了解的特定信息，请随时告诉我。`;
       }
       
       const newMsg = {
@@ -1483,7 +1710,7 @@ document.addEventListener('DOMContentLoaded', () => {
         duration = Math.floor(Math.random() * 6) + 7; // 7-13秒
       } else if (randomPetId === 'pet-003') {
         // 狗狗风格
-        reply = `哎呦我去！各位听听，主人说${userMessage}，这多有意思啊！您看旺财我今儿个就有口福了！`;
+        reply = `哎呦我去！各位听听，主人说${userMessage}，这多有意思啊！您看咪咕我今儿个就有口福了！`;
         duration = Math.floor(Math.random() * 8) + 8; // 8-16秒
       } else if (randomPetId === 'pet-004') {
         // 荷兰猪风格
@@ -1491,23 +1718,32 @@ document.addEventListener('DOMContentLoaded', () => {
         duration = Math.floor(Math.random() * 4) + 4; // 4-8秒
       }
       
-      // 决定是否发送语音消息（80%的概率为语音消息）
-      const isVoiceMessage = Math.random() < 0.8;
+      // 决定消息类型：30%文本，30%语音+文本，40%纯音频
+      const msgTypeRandom = Math.random();
+      let contentType = 'text';
+      
+      if (msgTypeRandom < 0.3) {
+        contentType = 'text';
+      } else if (msgTypeRandom < 0.6) {
+        contentType = 'voice';
+      } else {
+        contentType = 'audio';
+      }
       
       const newMsg = {
         id: `group-msg-${Date.now()}`,
         type: 'pet',
         petId: randomPetId,
-        contentType: isVoiceMessage ? 'voice' : 'text',
-        content: reply,
+        contentType: contentType,
+        content: contentType === 'audio' ? '' : reply,
         timestamp: Date.now(),
         read: false,
         category: 'chat',
         urgent: 0,
       };
       
-      // 如果是语音消息，添加相关属性
-      if (isVoiceMessage) {
+      // 如果是语音或纯音频消息，添加相关属性
+      if (contentType === 'voice' || contentType === 'audio') {
         // 根据宠物类型分配不同的虚拟语音URL
         const petTypeMap = {
           'pet-001': 'hamster',
@@ -2227,6 +2463,26 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         `;
       }
+    },
+    
+    // 播放语音消息并处理TTS
+    playVoiceMessage(msgId, text, type, petType) {
+      console.log('main.js playVoiceMessage被调用:', msgId, text, type, petType);
+      
+      // 调用全局播放函数
+      if (window.appData && window.appData.playVoiceMessage) {
+        window.appData.playVoiceMessage(msgId, text, type, petType);
+      } else {
+        console.error('全局播放函数未初始化!');
+        
+        // 基本播放逻辑作为备份
+        const audioElement = document.getElementById(`audio-${msgId}`);
+        if (audioElement) {
+          audioElement.play().catch(err => {
+            console.error('播放失败:', err);
+          });
+        }
+      }
     }
   };
   
@@ -2235,6 +2491,13 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // 启动 Alpine.js
   Alpine.start();
+  
+  // 在初始化代码的末尾(document.addEventListener('DOMContentLoaded'部分)
+  // 添加window.appData初始化
+  window.appData = Alpine.data('app', appData);
+  
+  // 初始化音频播放器
+  initAudioPlayer();
 });
 
 // 组件：报告详情

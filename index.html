@@ -14,11 +14,8 @@
     <!-- 聊天列表页面 -->
     <div x-show="currentPage === 'chatList'" class="h-full">
       <header class="bg-white sticky top-0 shadow-sm z-10">
-        <div class="flex justify-between items-center p-4">
-          <h1 class="text-lg font-medium">宠物聊天</h1>
-          <button class="p-2 rounded-full hover:bg-gray-100" @click="openSettings">
-            <span class="material-icons text-text-secondary">settings</span>
-          </button>
+        <div class="flex justify-center items-center p-4">
+          <h1 class="text-lg font-medium text-center">宠物聊天</h1>
         </div>
       </header>
       
@@ -27,21 +24,9 @@
         <div class="p-4 border-b cursor-pointer hover:bg-gray-50" @click="openChat('group')">
           <div class="flex items-center">
             <div class="relative flex-shrink-0">
-              <!-- 群组头像，显示多个宠物头像 -->
-              <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center overflow-hidden">
-                <!-- 多个头像叠加 -->
-                <div class="absolute w-6 h-6 rounded-full overflow-hidden top-1 left-1">
-                  <img src="https://images.pexels.com/photos/4520481/pexels-photo-4520481.jpeg?auto=compress&cs=tinysrgb&w=600" alt="宠物1" class="w-full h-full object-cover">
-                </div>
-                <div class="absolute w-6 h-6 rounded-full overflow-hidden top-1 right-1">
-                  <img src="https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg?auto=compress&cs=tinysrgb&w=600" alt="宠物2" class="w-full h-full object-cover">
-                </div>
-                <div class="absolute w-6 h-6 rounded-full overflow-hidden bottom-1 left-1">
-                  <img src="https://images.pexels.com/photos/1805164/pexels-photo-1805164.jpeg?auto=compress&cs=tinysrgb&w=600" alt="宠物3" class="w-full h-full object-cover">
-                </div>
-                <div class="absolute w-6 h-6 rounded-full overflow-hidden bottom-1 right-1">
-                  <img src="https://images.pexels.com/photos/5623628/pexels-photo-5623628.jpeg?auto=compress&cs=tinysrgb&w=600" alt="宠物4" class="w-full h-full object-cover">
-                </div>
+              <!-- 使用groupData中的头像 -->
+              <div class="w-12 h-12 rounded-full overflow-hidden">
+                <img :src="groupData.avatar" alt="宠物家族群" class="w-full h-full object-cover">
               </div>
             </div>
             <div class="ml-3 flex-1">
@@ -490,33 +475,19 @@
         <h2 class="text-lg font-medium mb-4">我的宠物</h2>
         <div class="grid grid-cols-1 gap-4 mb-6">
           <template x-for="pet in allPetsData" :key="pet.id">
-            <div class="bg-white rounded-xl shadow-md p-4">
+            <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-4">
               <div class="flex items-center">
-                <div class="w-16 h-16 bg-gray-200 rounded-full overflow-hidden mr-4">
+                <div class="w-14 h-14 bg-gray-200 rounded-full overflow-hidden mr-3 border-2 border-primary cursor-pointer" @click="openChat('pet', pet.id)">
                   <img :src="pet.avatar" class="w-full h-full object-cover" :alt="pet.name + '头像'">
                 </div>
-                <div class="flex-1">
-                  <h3 class="text-lg font-semibold" x-text="pet.name"></h3>
-                  <p class="text-text-secondary text-sm" x-text="`${pet.type} · ${pet.breed} · ${pet.age}岁`"></p>
-                  <div class="mt-1 flex flex-wrap gap-1">
-                    <template x-for="trait in pet.personality.slice(0,2)" :key="trait">
-                      <span class="text-xs px-2 py-0.5 bg-gray-100 rounded-full" x-text="trait"></span>
-                    </template>
-                  </div>
+                <div class="flex-1 cursor-pointer" @click="openChat('pet', pet.id)">
+                  <h3 class="text-lg font-medium" x-text="pet.name"></h3>
                 </div>
                 <div>
-                  <button @click="openPetSettings(pet.id)" class="text-primary">
+                  <button @click="showPetDetails(pet.id)" class="text-primary rounded-full w-8 h-8 flex items-center justify-center hover:bg-blue-50">
                     <span class="material-icons">settings</span>
                   </button>
                 </div>
-              </div>
-              <div class="mt-2 flex justify-between">
-                <button @click="openChat('pet', pet.id)" class="flex-1 py-1.5 mr-2 bg-blue-500 text-white text-sm rounded-full">
-                  聊天
-                </button>
-                <button @click="openMonitoring()" class="flex-1 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-full">
-                  监控
-                </button>
               </div>
             </div>
           </template>
@@ -580,7 +551,7 @@
         <div class="p-4">
           <div class="flex justify-center mb-4">
             <div class="relative">
-              <div class="w-24 h-24 bg-gray-200 rounded-full overflow-hidden">
+              <div class="w-24 h-24 bg-gray-200 rounded-full overflow-hidden border-2 border-primary">
                 <img :src="pet.avatar" class="w-full h-full object-cover" alt="宠物头像">
               </div>
               <button class="absolute bottom-0 right-0 bg-primary text-white rounded-full p-1">
@@ -599,8 +570,9 @@
               <label class="block text-text-secondary text-sm mb-1">类型</label>
               <select class="w-full p-2 border rounded-lg" x-model="pet.type">
                 <option value="仓鼠">仓鼠</option>
-                <option value="花枝鼠">花枝鼠</option>
-                <option value="松鼠">松鼠</option>
+                <option value="猫">猫</option>
+                <option value="狗">狗</option>
+                <option value="荷兰猪">荷兰猪</option>
                 <option value="其他">其他</option>
               </select>
             </div>
@@ -610,7 +582,7 @@
             </div>
           </div>
           
-          <div class="grid grid-cols-2 gap-3 mb-3">
+          <div class="grid grid-cols-2 gap-3 mb-4">
             <div>
               <label class="block text-text-secondary text-sm mb-1">性别</label>
               <select class="w-full p-2 border rounded-lg" x-model="pet.gender">
@@ -625,11 +597,170 @@
           </div>
           
           <div class="mb-4">
-            <label class="block text-text-secondary text-sm mb-1">生日</label>
-            <input type="date" x-model="pet.birthday" class="w-full p-2 border rounded-lg">
+            <label class="block text-text-secondary text-sm mb-1">性格特点</label>
+            <div class="flex flex-wrap gap-2 mb-2">
+              <template x-for="(trait, index) in pet.personality" :key="index">
+                <div class="bg-gray-100 rounded-full px-3 py-1 text-sm flex items-center">
+                  <span x-text="trait"></span>
+                  <button @click="removeTrait(index)" class="ml-1 text-gray-500 hover:text-red-500">
+                    <span class="material-icons text-sm">close</span>
+                  </button>
+                </div>
+              </template>
+            </div>
+            <div class="flex">
+              <input type="text" x-model="newTrait" placeholder="添加性格特点" class="flex-1 p-2 border rounded-lg rounded-r-none">
+              <button @click="addTrait()" class="bg-primary text-white px-3 rounded-lg rounded-l-none">添加</button>
+            </div>
           </div>
           
-          <button class="w-full bg-primary text-white py-3 rounded-lg">保存修改</button>
+          <!-- 根据宠物类型显示特定的设置选项 -->
+          <div class="mb-4" x-show="pet.type === '仓鼠'" x-init="if (!pet.specificTraits) pet.specificTraits = {}">
+            <h3 class="text-gray-700 font-medium mb-2">仓鼠特定设置</h3>
+            <div class="grid grid-cols-1 gap-3">
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">居住环境</label>
+                <select class="w-full p-2 border rounded-lg" 
+                        :value="(pet.specificTraits.habitat) ? pet.specificTraits.habitat : '笼子'"
+                        @change="if (!pet.specificTraits) pet.specificTraits = {}; pet.specificTraits.habitat = $event.target.value">
+                  <option value="笼子">笼子</option>
+                  <option value="缸">玻璃缸</option>
+                  <option value="围栏">围栏式</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">喜爱活动</label>
+                <select class="w-full p-2 border rounded-lg"
+                        :value="(pet.specificTraits.favoriteActivity) ? pet.specificTraits.favoriteActivity : '跑轮'"
+                        @change="if (!pet.specificTraits) pet.specificTraits = {}; pet.specificTraits.favoriteActivity = $event.target.value">
+                  <option value="跑轮">跑轮</option>
+                  <option value="爬管">爬管道</option>
+                  <option value="挖掘">挖掘垫材</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">垫材偏好</label>
+                <select class="w-full p-2 border rounded-lg"
+                        :value="(pet.specificTraits.bedding) ? pet.specificTraits.bedding : '木屑'"
+                        @change="if (!pet.specificTraits) pet.specificTraits = {}; pet.specificTraits.bedding = $event.target.value">
+                  <option value="木屑">木屑</option>
+                  <option value="纸巾">纸巾</option>
+                  <option value="亚麻">亚麻垫料</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mb-4" x-show="pet.type === '猫'" x-init="if (!pet.specificTraits) pet.specificTraits = {}">
+            <h3 class="text-gray-700 font-medium mb-2">猫咪特定设置</h3>
+            <div class="grid grid-cols-1 gap-3">
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">猫砂类型</label>
+                <select class="w-full p-2 border rounded-lg"
+                        :value="(pet.specificTraits.litterType) ? pet.specificTraits.litterType : '膨润土'"
+                        @change="if (!pet.specificTraits) pet.specificTraits = {}; pet.specificTraits.litterType = $event.target.value">
+                  <option value="膨润土">膨润土</option>
+                  <option value="豆腐砂">豆腐砂</option>
+                  <option value="水晶砂">水晶砂</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">活动环境</label>
+                <select class="w-full p-2 border rounded-lg"
+                        :value="(pet.specificTraits.indoorOutdoor) ? pet.specificTraits.indoorOutdoor : '室内'"
+                        @change="if (!pet.specificTraits) pet.specificTraits = {}; pet.specificTraits.indoorOutdoor = $event.target.value">
+                  <option value="室内">纯室内</option>
+                  <option value="室内外">室内外结合</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">抓挠偏好</label>
+                <select class="w-full p-2 border rounded-lg"
+                        :value="(pet.specificTraits.scratchingPreference) ? pet.specificTraits.scratchingPreference : '猫抓板'"
+                        @change="if (!pet.specificTraits) pet.specificTraits = {}; pet.specificTraits.scratchingPreference = $event.target.value">
+                  <option value="猫抓板">猫抓板</option>
+                  <option value="猫抓柱">猫抓柱</option>
+                  <option value="沙发">沙发(无法更改)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mb-4" x-show="pet.type === '狗'" x-init="if (!pet.specificTraits) pet.specificTraits = {}">
+            <h3 class="text-gray-700 font-medium mb-2">狗狗特定设置</h3>
+            <div class="grid grid-cols-1 gap-3">
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">散步频率</label>
+                <select class="w-full p-2 border rounded-lg"
+                        :value="(pet.specificTraits.walkFrequency) ? pet.specificTraits.walkFrequency : '每天两次'"
+                        @change="if (!pet.specificTraits) pet.specificTraits = {}; pet.specificTraits.walkFrequency = $event.target.value">
+                  <option value="每天一次">每天一次</option>
+                  <option value="每天两次">每天两次</option>
+                  <option value="每天三次">每天三次</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">训练水平</label>
+                <select class="w-full p-2 border rounded-lg"
+                        :value="(pet.specificTraits.trainingLevel) ? pet.specificTraits.trainingLevel : '基础'"
+                        @change="if (!pet.specificTraits) pet.specificTraits = {}; pet.specificTraits.trainingLevel = $event.target.value">
+                  <option value="未训练">未训练</option>
+                  <option value="基础">基础训练</option>
+                  <option value="进阶">进阶训练</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">食物偏好</label>
+                <select class="w-full p-2 border rounded-lg"
+                        :value="(pet.specificTraits.foodPreference) ? pet.specificTraits.foodPreference : '干粮'"
+                        @change="if (!pet.specificTraits) pet.specificTraits = {}; pet.specificTraits.foodPreference = $event.target.value">
+                  <option value="干粮">干粮</option>
+                  <option value="湿粮">湿粮</option>
+                  <option value="混合">干湿混合</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mb-4" x-show="pet.type === '荷兰猪'" x-init="if (!pet.specificTraits) pet.specificTraits = {}">
+            <h3 class="text-gray-700 font-medium mb-2">荷兰猪特定设置</h3>
+            <div class="grid grid-cols-1 gap-3">
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">笼子大小</label>
+                <select class="w-full p-2 border rounded-lg"
+                        :value="(pet.specificTraits.cageSize) ? pet.specificTraits.cageSize : '中型'"
+                        @change="if (!pet.specificTraits) pet.specificTraits = {}; pet.specificTraits.cageSize = $event.target.value">
+                  <option value="小型">小型</option>
+                  <option value="中型">中型</option>
+                  <option value="大型">大型</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">干草消耗</label>
+                <select class="w-full p-2 border rounded-lg"
+                        :value="(pet.specificTraits.hayConsumption) ? pet.specificTraits.hayConsumption : '高'"
+                        @change="if (!pet.specificTraits) pet.specificTraits = {}; pet.specificTraits.hayConsumption = $event.target.value">
+                  <option value="低">低</option>
+                  <option value="中">中</option>
+                  <option value="高">高</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">社交需求</label>
+                <select class="w-full p-2 border rounded-lg"
+                        :value="(pet.specificTraits.companionship) ? pet.specificTraits.companionship : '需要伴侣'"
+                        @change="if (!pet.specificTraits) pet.specificTraits = {}; pet.specificTraits.companionship = $event.target.value">
+                  <option value="独居">可独居</option>
+                  <option value="需要伴侣">需要伴侣</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex gap-3">
+            <button @click="showModal = false" class="flex-1 border border-gray-300 py-3 rounded-lg">取消</button>
+            <button @click="savePetDetails()" class="flex-1 bg-primary text-white py-3 rounded-lg">保存</button>
+          </div>
         </div>
       </div>
     </div>

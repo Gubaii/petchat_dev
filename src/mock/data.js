@@ -1,9 +1,9 @@
 // 宠物虚拟数据
 export const petData = {
   id: 'pet-001',
-  name: '豆豆',
+  name: '一点点',
   type: '仓鼠',
-  breed: '布丁仓鼠',
+  breed: '侏儒仓鼠',
   age: 1,
   gender: '公',
   birthday: '2023-05-15',
@@ -25,14 +25,14 @@ export const petData = {
 export const allPetsData = [
   {
     id: 'pet-001',
-    name: '豆豆',
+    name: '一点点',
     type: '仓鼠',
-    breed: '布丁仓鼠',
+    breed: '侏儒仓鼠',
     age: 1,
     gender: '公',
     birthday: '2023-05-15',
     adoptionDate: '2023-06-20',
-    avatar: 'https://images.pexels.com/photos/4520481/pexels-photo-4520481.jpeg?auto=compress&cs=tinysrgb&w=600',
+    avatar: '/assets/images/hamster-avatar.jpeg',
     voice: {
       type: '轻快活泼',
       speed: 1.2,
@@ -48,14 +48,14 @@ export const allPetsData = [
   },
   {
     id: 'pet-002',
-    name: '咪咪',
+    name: '阿努比斯',
     type: '猫',
     breed: '英国短毛猫',
     age: 2,
     gender: '母',
     birthday: '2022-03-10',
     adoptionDate: '2022-04-15',
-    avatar: 'https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg?auto=compress&cs=tinysrgb&w=600',
+    avatar:'/assets/images/cat-avatar.jpeg',
     voice: {
       type: '优雅甜美',
       speed: 1.0,
@@ -71,14 +71,14 @@ export const allPetsData = [
   },
   {
     id: 'pet-003',
-    name: '旺财',
+    name: '咪咕',
     type: '狗',
     breed: '柴犬',
     age: 3,
     gender: '公',
     birthday: '2021-06-20',
     adoptionDate: '2021-08-10',
-    avatar: 'https://images.pexels.com/photos/1805164/pexels-photo-1805164.jpeg?auto=compress&cs=tinysrgb&w=600',
+    avatar: '/assets/images/dog-avatar.jpeg',
     voice: {
       type: '诙谐幽默',
       speed: 1.4,
@@ -94,14 +94,14 @@ export const allPetsData = [
   },
   {
     id: 'pet-004',
-    name: '球球',
+    name: '刘看山',
     type: '荷兰猪',
     breed: '英国荷兰猪',
     age: 1,
     gender: '母',
     birthday: '2023-01-05',
     adoptionDate: '2023-02-15',
-    avatar: 'https://images.pexels.com/photos/5623628/pexels-photo-5623628.jpeg?auto=compress&cs=tinysrgb&w=600',
+    avatar: '/assets/images/pig-avatar.jpeg',
     voice: {
       type: '憨厚可爱',
       speed: 0.9,
@@ -132,52 +132,54 @@ export const messageData = [
   },
   {
     id: 'msg-past-002',
-    type: 'user',
+    type: 'pet',
     contentType: 'voice',
-    content: '豆豆，你今天有没有喝足够的水啊？我看系统提醒你饮水量不足。',
+    content: '吱！闹钟响第三次了，再不起床你全勤奖没了...唔...其实我也刚醒... ',
     timestamp: Date.now() - 36 * 3600 * 1000 - 11 * 3600 * 1000,
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/2448/2448-preview.mp3',
+    mediaUrl: '',  // 原来是 'https://assets.mixkit.co/active_storage/sfx/209/209-preview.mp3'
     duration: 3,
   },
   {
     id: 'msg-past-003',
-    type: 'pet',
+    type: 'user',
     contentType: 'voice',
-    content: '吱吱~我喝了一点水，但是我更喜欢吃多汁的蔬菜！',
+    content: '豆豆，你今天要记得喝足够的水？我看系统提醒你最近饮水量不足。',
     timestamp: Date.now() - 36 * 3600 * 1000 - 10.9 * 3600 * 1000,
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/209/209-preview.mp3',
+    mediaUrl: '',  // 原来是 'https://assets.mixkit.co/active_storage/sfx/2448/2448-preview.mp3'
     duration: 3,
   },
   {
     id: 'msg-past-004',
-    type: 'user',
+    type: 'pet',
     contentType: 'voice',
-    content: '那我一会儿给你准备一些黄瓜片和生菜叶，你要乖乖吃完哦！记得多喝水对身体好！',
+    content: '知道了知道了，你快去赚钱吧！',
     timestamp: Date.now() - 36 * 3600 * 1000 - 10.8 * 3600 * 1000,
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/2448/2448-preview.mp3',
-    duration: 4,
+    mediaUrl: '',  // 原来是 'https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3'
+    duration: 2,
   },
+ 
   {
     id: 'msg-past-005',
-    type: 'pet',
+    type: 'user',
     contentType: 'voice',
-    content: '吱吱吱！黄瓜是我的最爱！主人你太好了！',
+    content: '那我一会儿给你准备一些黄瓜片和生菜叶，你要乖乖吃完哦！记得多喝水对身体好！',
     timestamp: Date.now() - 36 * 3600 * 1000 - 10.7 * 3600 * 1000,
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3',
-    duration: 2,
+    mediaUrl: '',  // 原来是 'https://assets.mixkit.co/active_storage/sfx/2448/2448-preview.mp3'
+    duration: 4,
   },
+  
   {
     id: 'msg-past-006',
     type: 'pet',
@@ -203,27 +205,39 @@ export const messageData = [
   },
   {
     id: 'msg-yesterday-002',
-    type: 'user',
+    type: 'pet',
     contentType: 'voice',
-    content: '豆豆，昨晚睡得好吗？我看你活动时间比平时增加了不少呢！',
+    content: '勇哥，我今天听到了个好玩的歌，分享给你听听！',
     timestamp: Date.now() - 24 * 3600 * 1000 - 9 * 3600 * 1000,
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/2448/2448-preview.mp3',
-    duration: 3,
+    mediaUrl: '',
+    duration: 4,
   },
   {
     id: 'msg-yesterday-003',
     type: 'pet',
     contentType: 'voice',
-    content: '睡得超好的！我在松软的垫材里挖了个小洞，暖暖的很舒服！',
+    content: '老鼠怕猫！那是谣传！一只小猫！有啥可怕！壮起鼠胆！把猫打翻！千古偏见！一定推翻！',
     timestamp: Date.now() - 24 * 3600 * 1000 - 8.9 * 3600 * 1000,
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/1018/1018-preview.mp3',
-    duration: 4,
+    mediaUrl: '/audio/ratMusic.mp3',
+    duration: 3,
+  },
+  {
+    id: 'msg-yesterday-0031',
+    type: 'pet',
+    contentType: 'voice',
+    content: '好听吧？，，，你怎么不说话了？',
+    timestamp: Date.now() - 24 * 3600 * 1000 - 8.9 * 3600 * 1000,
+    read: true,
+    category: 'chat',
+    urgent: 0,
+    mediaUrl: '/public/audio/ratMusic.mp3',
+    duration: 3,
   },
   {
     id: 'msg-yesterday-004',
@@ -245,7 +259,7 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/209/209-preview.mp3',
+    mediaUrl: '',
     duration: 3,
   },
   {
@@ -257,7 +271,7 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/2300/2300-preview.mp3',
+    mediaUrl: '',
     duration: 3,
   },
   {
@@ -292,8 +306,20 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3',
+    mediaUrl: '',
     duration: 3,
+  },
+  {
+    id: 'msg-audio-001',
+    type: 'pet',
+    contentType: 'audio',
+    content: '',
+    timestamp: Date.now() - 9.85 * 3600 * 1000, // 9小时51分钟前
+    read: true,
+    category: 'chat',
+    urgent: 0,
+    mediaUrl: '',
+    duration: 2,
   },
   {
     id: 'msg-003',
@@ -304,8 +330,20 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/2300/2300-preview.mp3',
+    mediaUrl: '',
     duration: 4,
+  },
+  {
+    id: 'msg-audio-002',
+    type: 'user',
+    contentType: 'audio',
+    content: '',
+    timestamp: Date.now() - 9.75 * 3600 * 1000, // 9小时45分钟前
+    read: true,
+    category: 'chat',
+    urgent: 0,
+    mediaUrl: '',
+    duration: 3,
   },
   {
     id: 'msg-004',
@@ -316,7 +354,7 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/1018/1018-preview.mp3',
+    mediaUrl: '',
     duration: 4,
   },
   {
@@ -341,7 +379,7 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/2448/2448-preview.mp3',
+    mediaUrl: '',
     duration: 3,
   },
   {
@@ -353,7 +391,7 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/209/209-preview.mp3',
+    mediaUrl: '',
     duration: 3,
   },
   {
@@ -376,7 +414,7 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3',
+    mediaUrl: '',
     duration: 3,
   },
   {
@@ -388,7 +426,7 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/2300/2300-preview.mp3',
+    mediaUrl: '',
     duration: 3,
   },
   {
@@ -400,7 +438,7 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3',
+    mediaUrl: '',
     duration: 2,
   },
   {
@@ -412,7 +450,7 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/2300/2300-preview.mp3',
+    mediaUrl: '',
     duration: 3,
   },
   {
@@ -424,7 +462,7 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/1018/1018-preview.mp3',
+    mediaUrl: '',
     duration: 3,
   },
   {
@@ -436,7 +474,7 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://vd3.bdstatic.com/mda-neqraqq8h8an23ei/720p/h264/1653385969639200280/mda-neqraqq8h8an23ei.mp4',
+    mediaUrl: '',
   },
   {
     id: 'msg-new-010',
@@ -447,7 +485,7 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/209/209-preview.mp3',
+    mediaUrl: '',
     duration: 2,
   },
   {
@@ -459,7 +497,7 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/2448/2448-preview.mp3',
+    mediaUrl: '',
     duration: 4,
   },
   {
@@ -482,7 +520,7 @@ export const messageData = [
     read: true,
     category: 'chat',
     urgent: 0,
-    mediaUrl: 'https://assets.mixkit.co/active_storage/sfx/2300/2300-preview.mp3',
+    mediaUrl: '',
     duration: 3,
   },
   {
@@ -820,7 +858,7 @@ export const catMessages = [
     id: 'cat-msg-002',
     type: 'user',
     contentType: 'voice',
-    content: '对不起咪咪，今天加班晚了，马上就给你准备美味的猫粮！',
+    content: '对不起阿努比斯，今天加班晚了，马上就给你准备美味的猫粮！',
     timestamp: Date.now() - 1.9 * 3600 * 1000,
     read: true,
     category: 'chat',
@@ -889,7 +927,7 @@ export const dogMessages = [
     id: 'dog-msg-002',
     type: 'user',
     contentType: 'voice',
-    content: '旺财，我今天给你买了新的狗粮和骨头玩具，你又在那胡说什么呢？',
+    content: '咪咕，我今天给你买了新的狗粮和骨头玩具，你又在那胡说什么呢？',
     timestamp: Date.now() - 2.9 * 3600 * 1000,
     read: true,
     category: 'chat',
@@ -934,7 +972,7 @@ export const dogMessages = [
     id: 'dog-msg-006',
     type: 'pet',
     contentType: 'image',
-    content: '您瞧瞧！这不是我昨天抓到的大灰球嘛！那叫一个威风，全公园的狗都给我面子，都说我旺财厉害啊！',
+    content: '您瞧瞧！这不是我昨天抓到的大灰球嘛！那叫一个威风，全公园的狗都给我面子，都说我咪咕厉害啊！',
     timestamp: Date.now() - 6 * 3600 * 1000,
     read: false,
     category: 'chat',
@@ -958,7 +996,7 @@ export const guineaPigMessages = [
     id: 'gp-msg-002',
     type: 'user',
     contentType: 'voice',
-    content: '球球，又卡住了？我跟你说过多少次不要钻那么小的洞啦！',
+    content: '刘看山，又卡住了？我跟你说过多少次不要钻那么小的洞啦！',
     timestamp: Date.now() - 3.9 * 3600 * 1000,
     read: true,
     category: 'chat',
@@ -1042,7 +1080,7 @@ export const groupMessages = [
     type: 'pet',
     petId: 'pet-002',
     contentType: 'voice',
-    content: '以月亮的名义！我是猫咪咪咪，我是守护这个家的英雄喵～',
+    content: '以月亮的名义！我是猫阿努比斯咪，我是守护这个家的英雄喵～',
     timestamp: Date.now() - 4.7 * 3600 * 1000,
     read: true,
     category: 'chat',
@@ -1055,7 +1093,7 @@ export const groupMessages = [
     type: 'pet',
     petId: 'pet-003',
     contentType: 'voice',
-    content: '各位，各位！您瞧瞧这阵势，四位齐聚一堂，那可真是蓬荜生辉啊！旺财给您问好了！',
+    content: '各位，各位！您瞧瞧这阵势，四位齐聚一堂，那可真是蓬荜生辉啊！阿努比斯给您问好了！',
     timestamp: Date.now() - 4.6 * 3600 * 1000,
     read: true,
     category: 'chat',
@@ -1068,7 +1106,7 @@ export const groupMessages = [
     type: 'pet',
     petId: 'pet-004',
     contentType: 'voice',
-    content: '咕噜咕噜...大家好...我是球球...我有点害怕...这么多宠物在一起...不过很高兴认识大家...',
+    content: '咕噜咕噜...大家好...我是刘看山...我有点害怕...这么多宠物在一起...不过很高兴认识大家...',
     timestamp: Date.now() - 4.5 * 3600 * 1000,
     read: true,
     category: 'chat',
@@ -1105,7 +1143,7 @@ export const groupMessages = [
     type: 'pet',
     petId: 'pet-003',
     contentType: 'voice',
-    content: '哎呦我去！仓鼠老弟这跑轮不错啊！不过您看我这身板，往上一趴，怕是得把这跑轮压成煎饼啊！哈哈哈哈！',
+    content: '哎呦我去！仓鼠老弟这跑轮不错啊！不过您看我阿努比斯这身板，往上一趴，怕是得把这跑轮压成煎饼啊！哈哈哈哈！',
     timestamp: Date.now() - 3.4 * 3600 * 1000,
     read: true,
     category: 'chat',
@@ -1130,7 +1168,7 @@ export const groupMessages = [
     type: 'pet',
     petId: 'pet-004',
     contentType: 'voice',
-    content: '啊啊啊啊！咪咪抓到蝴蝶了！好可怕！我要躲起来！咕噜咕噜...',
+    content: '啊啊啊啊！阿努比斯抓到蝴蝶了！好可怕！我要躲起来！咕噜咕噜...',
     timestamp: Date.now() - 2.4 * 3600 * 1000,
     read: true,
     category: 'chat',
@@ -1143,7 +1181,7 @@ export const groupMessages = [
     type: 'pet',
     petId: 'pet-001',
     contentType: 'voice',
-    content: '咪咪好厉害！我也想抓蝴蝶，但是我太小了，蝴蝶飞得太高啦！',
+    content: '阿努比斯好厉害！我也想抓蝴蝶，但是我太小了，蝴蝶飞得太高啦！',
     timestamp: Date.now() - 2.3 * 3600 * 1000,
     read: true,
     category: 'chat',
@@ -1184,7 +1222,7 @@ export const systemMessagesV2 = [
     iconColor: "text-green-500",
     chartData: {
       activityData: {
-        petNames: ["豆豆", "咪咪", "旺财", "球球"],
+        petNames: ["豆豆", "阿努比斯", "阿努比斯", "刘看山"],
         activityValues: [65, 42, 83, 37],
         previousValues: [50, 45, 70, 30],
         timeDistribution: [
@@ -1195,27 +1233,27 @@ export const systemMessagesV2 = [
         ]
       },
       healthScores: {
-        petNames: ["豆豆", "咪咪", "旺财", "球球"],
+        petNames: ["豆豆", "阿努比斯", "阿努比斯", "刘看山"],
         scores: [92, 88, 95, 86]
       },
       feedingData: {
         meals: [
-          {time: "08:30", petNames: ["豆豆", "咪咪", "旺财", "球球"], amount: "正常"},
-          {time: "12:45", petNames: ["豆豆", "旺财", "球球"], amount: "正常"},
-          {time: "13:20", petNames: ["咪咪"], amount: "少量"},
-          {time: "18:00", petNames: ["豆豆", "咪咪", "旺财", "球球"], amount: "正常"}
+          {time: "08:30", petNames: ["豆豆", "阿努比斯", "阿努比斯", "刘看山"], amount: "正常"},
+          {time: "12:45", petNames: ["豆豆", "阿努比斯", "刘看山"], amount: "正常"},
+          {time: "13:20", petNames: ["阿努比斯"], amount: "少量"},
+          {time: "18:00", petNames: ["豆豆", "阿努比斯", "阿努比斯", "刘看山"], amount: "正常"}
         ],
         waterIntake: {
-          petNames: ["豆豆", "咪咪", "旺财", "球球"],
+          petNames: ["豆豆", "阿努比斯", "阿努比斯", "刘看山"],
           values: [85, 65, 90, 95],
           unit: "ml"
         }
       },
       momentHighlights: [
         {petName: "豆豆", time: "10:23", description: "在跑轮上跑了20分钟", imageUrl: "https://images.pexels.com/photos/4520474/pexels-photo-4520474.jpeg?auto=compress&cs=tinysrgb&w=600"},
-        {petName: "咪咪", time: "14:12", description: "在窗台晒太阳", imageUrl: "https://images.pexels.com/photos/2071873/pexels-photo-2071873.jpeg?auto=compress&cs=tinysrgb&w=600"},
-        {petName: "旺财", time: "16:30", description: "玩飞盘游戏", imageUrl: "https://images.pexels.com/photos/1254140/pexels-photo-1254140.jpeg?auto=compress&cs=tinysrgb&w=600"},
-        {petName: "球球", time: "11:45", description: "吃新鲜蔬菜", imageUrl: "https://images.pexels.com/photos/5623628/pexels-photo-5623628.jpeg?auto=compress&cs=tinysrgb&w=600"}
+        {petName: "阿努比斯", time: "14:12", description: "在窗台晒太阳", imageUrl: "https://images.pexels.com/photos/2071873/pexels-photo-2071873.jpeg?auto=compress&cs=tinysrgb&w=600"},
+        {petName: "阿努比斯", time: "16:30", description: "玩飞盘游戏", imageUrl: "https://images.pexels.com/photos/1254140/pexels-photo-1254140.jpeg?auto=compress&cs=tinysrgb&w=600"},
+        {petName: "刘看山", time: "11:45", description: "吃新鲜蔬菜", imageUrl: "https://images.pexels.com/photos/5623628/pexels-photo-5623628.jpeg?auto=compress&cs=tinysrgb&w=600"}
       ]
     }
   },
@@ -1238,21 +1276,21 @@ export const systemMessagesV2 = [
         days: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
         datasets: [
           {name: "豆豆", values: [60, 70, 65, 75, 68, 80, 85]},
-          {name: "咪咪", values: [45, 50, 40, 55, 60, 50, 48]},
-          {name: "旺财", values: [80, 75, 82, 78, 85, 90, 88]},
-          {name: "球球", values: [30, 35, 32, 40, 35, 42, 45]}
+          {name: "阿努比斯", values: [45, 50, 40, 55, 60, 50, 48]},
+          {name: "咪咕", values: [80, 75, 82, 78, 85, 90, 88]},
+          {name: "刘看山", values: [30, 35, 32, 40, 35, 42, 45]}
         ],
         previousWeekAvg: [65, 48, 78, 35]
       },
       behaviorPatterns: {
-        petNames: ["豆豆", "咪咪", "旺财", "球球"],
+        petNames: ["豆豆", "阿努比斯", "咪咕", "刘看山"],
         sleepQuality: [4.2, 4.5, 4.0, 3.8],
         activityRegularity: [3.8, 3.5, 4.3, 3.6],
         socialInteractions: [4.0, 3.2, 4.5, 3.0],
         maxScore: 5
       },
       healthIndicators: {
-        petNames: ["豆豆", "咪咪", "旺财", "球球"],
+        petNames: ["豆豆", "阿努比斯", "咪咕", "刘看山"],
         appetite: [90, 85, 95, 80],
         energy: [95, 75, 90, 85],
         hydration: [85, 70, 90, 95],
@@ -1261,7 +1299,7 @@ export const systemMessagesV2 = [
       weeklyHighlights: {
         videoUrl: "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
         thumbnail: "https://images.pexels.com/photos/4587955/pexels-photo-4587955.jpeg?auto=compress&cs=tinysrgb&w=600",
-        description: "本周精彩瞬间：旺财和球球的玩耍时光"
+        description: "本周精彩瞬间：阿努比斯和刘看山的玩耍时光"
       }
     }
   },
@@ -1270,7 +1308,7 @@ export const systemMessagesV2 = [
     type: "system",
     contentType: "report-card",
     title: "10月宠物健康月报",
-    summary: "所有宠物本月健康评分均在85分以上，球球体重有轻微增加。",
+    summary: "所有宠物本月健康评分均在85分以上，刘看山体重有轻微增加。",
     details: "查看详细月度健康分析报告",
     timestamp: Date.now() - 1000 * 60 * 60 * 24 * 7,
     read: false,
@@ -1281,16 +1319,16 @@ export const systemMessagesV2 = [
     iconColor: "text-purple-500",
     chartData: {
       monthlyHealth: {
-        petNames: ["豆豆", "咪咪", "旺财", "球球"],
+        petNames: ["豆豆", "阿努比斯", "咪咕", "刘看山"],
         currentScores: [93, 89, 95, 87],
         previousScores: [90, 92, 94, 85],
         categoryScores: {
           categories: ["营养", "活动", "休息", "体重", "精神"],
           datasets: [
             {name: "豆豆", values: [90, 95, 85, 92, 94]},
-            {name: "咪咪", values: [88, 80, 95, 90, 92]},
-            {name: "旺财", values: [92, 98, 90, 95, 96]},
-            {name: "球球", values: [85, 75, 90, 82, 88]}
+            {name: "阿努比斯", values: [88, 80, 95, 90, 92]},
+            {name: "咪咕", values: [92, 98, 90, 95, 96]},
+            {name: "刘看山", values: [85, 75, 90, 82, 88]}
           ]
         }
       },
@@ -1298,17 +1336,17 @@ export const systemMessagesV2 = [
         weeks: ["第1周", "第2周", "第3周", "第4周"],
         datasets: [
           {name: "豆豆-活动", values: [60, 65, 70, 75]},
-          {name: "咪咪-活动", values: [45, 42, 48, 50]},
-          {name: "旺财-活动", values: [80, 82, 85, 88]},
-          {name: "球球-活动", values: [30, 32, 35, 40]}
+          {name: "阿努比斯-活动", values: [45, 42, 48, 50]},
+          {name: "咪咕-活动", values: [80, 82, 85, 88]},
+          {name: "刘看山-活动", values: [30, 32, 35, 40]}
         ]
       },
       anomalies: [
         {petName: "豆豆", week: "第2周", issue: "轻微食欲下降", resolution: "已调整饮食，恢复正常"},
-        {petName: "咪咪", week: "第3周", issue: "睡眠时间延长", resolution: "已观察无异常，可能因季节变化"}
+        {petName: "阿努比斯", week: "第3周", issue: "睡眠时间延长", resolution: "已观察无异常，可能因季节变化"}
       ],
       dietAnalysis: {
-        petNames: ["豆豆", "咪咪", "旺财", "球球"],
+        petNames: ["豆豆", "阿努比斯", "咪咕", "刘看山"],
         foodPreferences: [
           ["葵花籽", "小麦", "坚果"],
           ["猫粮", "小鱼干", "猫草"],
@@ -1319,9 +1357,9 @@ export const systemMessagesV2 = [
           timeSlots: ["早上", "中午", "晚上"],
           datasets: [
             {name: "豆豆", values: [35, 30, 35]},
-            {name: "咪咪", values: [40, 20, 40]},
-            {name: "旺财", values: [30, 30, 40]},
-            {name: "球球", values: [25, 35, 40]}
+            {name: "阿努比斯", values: [40, 20, 40]},
+            {name: "咪咕", values: [30, 30, 40]},
+            {name: "刘看山", values: [25, 35, 40]}
           ]
         }
       },
@@ -1329,9 +1367,9 @@ export const systemMessagesV2 = [
         months: ["8月", "9月", "10月"],
         weights: [
           {name: "豆豆", values: [0.13, 0.14, 0.145]},
-          {name: "咪咪", values: [4.2, 4.3, 4.25]},
-          {name: "旺财", values: [9.8, 10.1, 10.2]},
-          {name: "球球", values: [0.8, 0.85, 0.9]}
+          {name: "阿努比斯", values: [4.2, 4.3, 4.25]},
+          {name: "咪咕", values: [9.8, 10.1, 10.2]},
+          {name: "刘看山", values: [0.8, 0.85, 0.9]}
         ],
         units: "kg"
       },
@@ -1366,3 +1404,34 @@ export const systemMessagesV2 = [
     category: "welcome"
   }
 ]; 
+
+// 群组数据
+export const groupData = {
+  id: 'group-001',
+  name: '宠物家族群',
+  avatar: '/assets/images/group-avatar.jpeg?v=' + Date.now(),
+  members: [
+    { 
+      id: 'pet-001', 
+      name: '一点点',
+      avatar: '/assets/images/hamster-avatar.jpeg'
+    },
+    { 
+      id: 'pet-002', 
+      name: '阿努比斯',
+      avatar: '/assets/images/cat-avatar.jpeg'
+    },
+    { 
+      id: 'pet-003', 
+      name: '阿努比斯',
+      avatar: '/assets/images/dog-avatar.jpeg'
+    },
+    { 
+      id: 'pet-004', 
+      name: '刘看山',
+      avatar: '/assets/images/pig-avatar.jpeg'
+    }
+  ],
+  lastActive: Date.now() - 600000, // 10分钟前
+  description: '这里是所有宠物的共同家园，一起分享快乐时光！'
+};
