@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>火山引擎TTS API测试</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    textarea, input, select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .log {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+      height: 150px;
+      overflow-y: auto;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>火山引擎TTS API测试</h1>
+  
+  <div class="form-group">
+    <label for="appid">AppID</label>
+    <input type="text" id="appid" placeholder="输入您的AppID">
+  </div>
+  
+  <div class="form-group">
+    <label for="token">Token</label>
+    <input type="text" id="token" placeholder="输入您的Token">
+  </div>
+  
+  <div class="form-group">
+    <label for="cluster">Cluster</label>
+    <input type="text" id="cluster" placeholder="输入您的Cluster">
+  </div>
+  
+  <div class="form-group">
+    <label for="voiceType">音色类型</label>
+    <select id="voiceType">
+      <option value="zh_male_M392_conversation_wvae_bigtts">男声对话</option>
+      <option value="zh_female_M392_conversation_wvae_bigtts">女声对话</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label for="text">文本内容</label>
+    <textarea id="text" rows="4" placeholder="输入要转换为语音的文本">你好，这是一段测试文本，用于验证火山引擎TTS API的调用。</textarea>
+  </div>
+  
+  <button id="submit">生成语音</button>
+  
+  <div class="result">
+    <h3>生成结果</h3>
+    <div id="audio-container"></div>
+    <div class="log" id="log"></div>
+  </div>
+
+  <script>
+    document.getElementById('submit').addEventListener('click', async () => {
+      const appid = document.getElementById('appid').value.trim();
+      const token = document.getElementById('token').value.trim();
+      const cluster = document.getElementById('cluster').value.trim();
+      const voiceType = document.getElementById('voiceType').value;
+      const text = document.getElementById('text').value.trim();
+      const logElement = document.getElementById('log');
+      const audioContainer = document.getElementById('audio-container');
+      
+      if (!appid || !token || !cluster || !text) {
+        log('错误: 请填写所有必填字段');
+        return;
+      }
+      
+      log('开始生成语音...');
+      
+      try {
+        // 生成真实的UUID
+        const reqid = generateUUID();
+        
+        // 构建请求数据
+        const requestData = {
+          app: {
+            appid: appid,
+            token: token,
+            cluster: cluster
+          },
+          user: {
+            uid: "uid123"
+          },
+          audio: {
+            voice_type: voiceType,
+            encoding: "mp3",
+            speed_ratio: 1.0
+          },
+          request: {
+            reqid: reqid,
+            text: text,
+            text_type: "plain",
+            operation: "query"
+          }
+        };
+        
+        log(`请求参数: ${JSON.stringify(requestData, null, 2)}`);
+        
+        // 发送请求到本地代理服务器
+        const response = await fetch('/api/tts_proxy', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+        });
+        
+        log(`收到响应状态码: ${response.status}`);
+        
+        // 如果响应不成功
+        if (!response.ok) {
+          // 尝试解析错误响应
+          try {
+            const errorData = await response.json();
+            const errorMessage = JSON.stringify(errorData, null, 2);
+            log(`错误: ${errorMessage}`);
+            console.error('API错误:', errorData);
+            
+            // 显示更多错误信息在UI中
+            audioContainer.innerHTML = `<div style="color: red; border: 1px solid red; padding: 10px; margin: 10px 0; background-color: #fff0f0;">
+              <h4>请求失败</h4>
+              <pre style="white-space: pre-wrap; word-break: break-all;">${errorMessage}</pre>
+            </div>`;
+            
+            throw new Error(`HTTP error! status: ${response.status}`);
+          } catch (jsonError) {
+            // 如果不是JSON，尝试作为文本读取
+            const errorText = await response.text().catch(() => '无法读取错误响应');
+            log(`错误: HTTP ${response.status} - ${errorText}`);
+            console.error('API错误文本:', errorText);
+            
+            audioContainer.innerHTML = `<div style="color: red; border: 1px solid red; padding: 10px; margin: 10px 0; background-color: #fff0f0;">
+              <h4>请求失败</h4>
+              <pre style="white-space: pre-wrap; word-break: break-all;">状态码: ${response.status}\n${errorText}</pre>
+            </div>`;
+            
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+        }
+        
+        // 获取响应数据
+        const responseData = await response.json();
+        log(`收到响应数据: ${JSON.stringify(responseData, null, 2)}`);
+
+        // 创建音频元素
+        audioContainer.innerHTML = '';
+
+        // 如果API返回了错误而非音频
+        if (!responseData.success) {
+          // 显示API的错误信息
+          audioContainer.innerHTML = `
+          <div style="color: red; margin-bottom: 15px; padding: 10px; background-color: #fff0f0; border: 1px solid #ffcccc; border-radius: 4px;">
+            <h4>API返回错误</h4>
+            <p><strong>错误信息:</strong> ${responseData.error || '未知错误'}</p>
+            ${responseData.details ? `<p><strong>详情:</strong> ${responseData.details}</p>` : ''}
+            ${responseData.statusCode ? `<p><strong>状态码:</strong> ${responseData.statusCode}</p>` : ''}
+            ${responseData.apiResponse ? 
+              `<p><strong>API完整响应:</strong></p>
+              <pre style="white-space: pre-wrap; word-break: break-all; max-height: 300px; overflow-y: auto; background-color: #f8f8f8; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+              ${JSON.stringify(responseData.apiResponse, null, 2)}
+              </pre>` : ''}
+          </div>`;
+          
+          log('API返回了错误信息，无法播放音频');
+          return;
+        }
+
+        // 下面的代码只在成功获取音频时执行
+        log(`创建的音频URL: ${responseData.audioUrl}, 文件大小: ${responseData.fileSize} 字节`);
+
+        // 添加调试信息
+        audioContainer.innerHTML += `
+        <div style="margin-bottom: 15px; padding: 10px; background-color: #f0f8ff; border: 1px solid #ccc; border-radius: 4px;">
+          <p><strong>返回信息</strong></p>
+          <ul>
+            <li>文件大小: ${responseData.fileSize} 字节</li>
+            <li>音频时长: ${responseData.duration} 秒</li>
+            <li>API状态码: ${responseData.apiResponse?.code || 'N/A'}</li>
+            <li>API消息: ${responseData.apiResponse?.message || 'N/A'}</li>
+          </ul>
+          <div style="margin-top: 10px;">
+            <a href="${responseData.audioUrl}" download="audio.mp3">下载音频文件</a>
+          </div>
+        </div>`;
+
+        // 创建并添加音频播放器
+        const audio = document.createElement('audio');
+        audio.controls = true;
+        audio.preload = "auto";
+
+        // 使用服务器返回的音频URL
+        audio.src = responseData.audioUrl;
+
+        // 添加音频加载事件监听
+        audio.onloadedmetadata = () => {
+          log(`音频元数据加载成功，时长: ${audio.duration.toFixed(2)}秒`);
+        };
+        
+        audio.oncanplaythrough = () => {
+          log(`音频已完全加载，可以播放`);
+        };
+        
+        audio.onerror = (e) => {
+          const errorDetails = audio.error ? `错误码: ${audio.error.code}, 消息: ${audio.error.message}` : '未知错误';
+          log(`音频加载错误: ${errorDetails}`);
+          console.error('Audio error:', audio.error);
+          
+          // 添加更多错误信息到UI
+          audioContainer.innerHTML += `
+          <div style="color: red; margin-top: 10px; padding: 10px; background-color: #fff0f0; border: 1px solid #ffcccc; border-radius: 4px;">
+            <p><strong>音频加载失败</strong></p>
+            <p>${errorDetails}</p>
+            <p>请尝试直接下载文件查看内容</p>
+          </div>`;
+        };
+        
+        // 添加到容器
+        audioContainer.appendChild(audio);
+        
+        // 自动播放一次
+        try {
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              log('自动播放开始');
+            }).catch(err => {
+              log('自动播放失败，可能需要用户交互: ' + err.message);
+              console.error('Autoplay failed:', err);
+            });
+          }
+        } catch (e) {
+          log('播放时出错: ' + e.message);
+        }
+        
+        log('语音生成成功!');
+      } catch (error) {
+        log(`错误: ${error.message}`);
+        console.error('Error:', error);
+      }
+    });
+    
+    function log(message) {
+      const logElement = document.getElementById('log');
+      const timestamp = new Date().toLocaleTimeString();
+      logElement.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+      logElement.scrollTop = logElement.scrollHeight;
+    }
+    
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0,
+              v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+  </script>
+</body>
+</html> 
