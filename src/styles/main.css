@@ -1,0 +1,219 @@
+/* 主要样式 */
+html, body {
+  height: 100%;
+  overscroll-behavior: none; /* 防止iOS橡皮筋效果 */
+  -webkit-tap-highlight-color: transparent; /* 防止点击高亮 */
+}
+
+#app {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  max-width: 500px;
+  margin: 0 auto;
+  height: 100%;
+  position: relative;
+}
+
+/* 宠物聊天气泡样式 */
+.bg-pet {
+  background-color: #FFF7E0; /* 浅黄色 */
+}
+
+.chat-bubble-in {
+  position: relative;
+  border-radius: 18px;
+  border-bottom-left-radius: 4px;
+}
+
+.chat-bubble-in::after {
+  content: none; /* 移除可能存在的第二个尖角 */
+}
+
+/* 用户聊天气泡样式 */
+.chat-bubble-out {
+  position: relative;
+  border-radius: 18px;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-bubble-out::after {
+  content: none; /* 移除可能存在的第二个尖角 */
+}
+
+/* 语音波形动画 */
+.voice-wave {
+  display: flex;
+  align-items: flex-end;
+  height: 16px;
+}
+
+.voice-wave span {
+  display: inline-block;
+  width: 2px;
+  background-color: currentColor;
+  margin-right: 2px;
+  border-radius: 2px;
+  animation: voiceWave 1.2s infinite ease-in-out;
+}
+
+.voice-wave span:nth-child(1) {
+  height: 6px;
+  animation-delay: 0s;
+}
+
+.voice-wave span:nth-child(2) {
+  height: 10px;
+  animation-delay: 0.2s;
+}
+
+.voice-wave span:nth-child(3) {
+  height: 16px;
+  animation-delay: 0.4s;
+}
+
+.voice-wave span:nth-child(4) {
+  height: 10px;
+  animation-delay: 0.6s;
+}
+
+.voice-wave span:nth-child(5) {
+  height: 6px;
+  animation-delay: 0.8s;
+}
+
+@keyframes voiceWave {
+  0%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.6);
+  }
+}
+
+/* 长按录音效果 */
+.recording-btn {
+  position: relative;
+  transition: transform 0.2s;
+}
+
+.recording-btn::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  background-color: rgba(249, 115, 22, 0.2);
+  border-radius: 50%;
+  transform: scale(0);
+  transition: transform 0.3s;
+}
+
+.recording-btn.active {
+  transform: scale(1.1);
+}
+
+.recording-btn.active::before {
+  transform: scale(1);
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* 系统消息样式 */
+.system-alert {
+  border-left: 3px solid #EF4444;
+}
+
+.system-daily {
+  border-left: 3px solid #10B981;
+}
+
+.system-weekly {
+  border-left: 3px solid #3B82F6;
+}
+
+.system-monthly {
+  border-left: 3px solid #8B5CF6;
+}
+
+/* 过渡动画 */
+.fade-enter-active, 
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: translateY(0);
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ddd; 
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ccc; 
+}
+
+/* 图表容器样式 */
+[id$="Chart"] {
+  width: 100% !important;
+  margin: 0 auto;
+  max-width: none !important;
+  box-sizing: border-box;
+}
+
+/* 确保ECharts实例宽度正确 */
+.echarts-container, .bg-white {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* 月度行为变化趋势图特殊处理 */
+#behaviorChangeChart {
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+/* 报告内容区域样式调整 */
+.space-y-6 > div {
+  width: 100%;
+  box-sizing: border-box;
+} 
